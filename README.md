@@ -1,3 +1,6 @@
-In this project we prepare to raw data that we pull from wire shark and use it to build a deep neural-network to detect DNS tunnelling network packages with over 99% acc
-at the same piece of code ve save architecture of our neural-network
-in second phase, now we can use it on live networks easly with just executing a simple script.
+https://www.researchgate.net/publication/354225319_Deep_Learning_Based_DNS_Tunneling_Detection_and_Blocking_System
+
+Abstract—The main purpose of DNS is to convert domain names into IPs. Due to the inadequate precautions taken for the security of DNS, it is used for malicious communication or data leakage. Within the scope of this study, a real-time deep network-based system is proposed on live networks to prevent the common DNS tunneling threats over DNS. The decision-making capability of the proposed system at the instant of threat on a live system is the particular feature of the study. Networks trained with various deep network topologies by using the data from Alexa top 1 million sites were tested on a
+live network. The system was integrated to the network during the tests to prevent threats in real-time. The result of the tests reveals that the threats were blocked with success rate of 99.91%. Obtained results confirm that we can block almost all tunnel attacks over DNS protocol. In addition, the average time to block each tunneled package was calculated to be 0.923 ms. This time clearly demonstrates that the network flow will not be affected, and no delay will be experienced in the operation of our system in real-time.
+
+
