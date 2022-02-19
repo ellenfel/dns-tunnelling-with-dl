@@ -4,33 +4,13 @@
 # preprocessing template
 
 # importing the libraries
-
 import math
 import numpy as np
 import pandas as pd
-import json as json
-import codecs as codecs
-
-"""
-import tensorflow as tf
-import re
-import time
-
-# Importing the dataset as list
-lines = open('captured', encoding = 'utf-8', errors = 'ignore').read().split('\n')
-"""
 
 # Importing the datasets as DataFrame
 # need to convert dataframe to float64 for feature scalling
-
 dataset0 = pd.read_fwf('dnsnormal_1.json', sep=" ", header = None) #tunelsiz
-
-"""
-filedata  = codecs.open('Normal_40000.json','r','utf-8')
-jsondata = json.loads(filedata.read())
-print(jsondata[0])
-"""
-
 dataset1 = pd.read_fwf('tunnel-data-4_1.txt', sep=" ", header = None) #tünelli
 
 # adding group no
@@ -83,10 +63,6 @@ new0.drop(to_drop, inplace=True, axis=1)
 to_drop = [0, 1]
 new1.drop(to_drop, inplace=True, axis=1)
 
-"""
-# cleaning 
-new = new[new.Name != '},']
-"""
 
 # Encoding categorical data/// working
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
@@ -102,15 +78,17 @@ new1['group_no'] = dataset1["group_no"]
 
 # getting the futures that we gonna use in nn 
 fea0=new0[new0.Name == 198]  # type(str)
-#fea1=new0[new0.Name == 916]  # data_len(int)
 fea2=new0[new0.Name == 3374] # ip_len(int)
 fea3=new0[new0.Name == 2507] # frame_len(int) 
+fea12=new0[new0.Name == 3366] #ip.flag.df
+fea25=new0[new0.Name == 1791]  # dns.qry.name(str)
+fea26=new0[new0.Name == 1792]  # dns.qry.name.len(int)
+#fea1=new0[new0.Name == 916]  # data_len(int)
 #fea7=new0[new0.Name == 1059] # frame.cap_len(int)  --id name wrong
 #fea8=new0[new0.Name == 1240] # ip.hdr_len(int)
 #fea9=new0[new0.Name == 1273] # ip.proto(int)
 #fea10=new0[new0.Name == 1858] # tcp_len(int)
 #fea11=new0[new0.Name == 3368] #ip.flag.rb
-fea12=new0[new0.Name == 3366] #ip.flag.df
 #fea13=new0[new0.Name == 3367] #ip.flag.mf
 #fea14=new0[new0.Name == 1849] #tcp.flag.res
 #fea15=new0[new0.Name == 1847] #tcp.flag.ns
@@ -119,21 +97,30 @@ fea12=new0[new0.Name == 3366] #ip.flag.df
 #fea18=new0[new0.Name == 1855] #tcp.flag.urg
 #fea19=new0[new0.Name == 1842] #tcp.flag.ack
 #fea20=new0[new0.Name == 1848] #tcp.flag.push
-fea25=new0[new0.Name == 1791]  # dns.qry.name(str)
-fea26=new0[new0.Name == 1792]  # dns.qry.name.len(int)
 
 fea0['Feature'] = fea0['Feature'].map(lambda x: str(x)[:-1])
 fea0['Feature'] = fea0['Feature'].map(lambda x: str(x)[:-1])
 fea0['Feature'] = fea0['Feature'].map(lambda x: str(x)[1:])
 fea0['Feature'] = fea0['Feature'].map(lambda x: str(x)[1:])
-
-#fea1['Feature'] = fea1['Feature'].str.replace(r'\D', '').astype(int)
 
 fea2['Feature'] = fea2['Feature'].map(lambda x: str(x)[:-1])
 fea2['Feature'] = fea2['Feature'].str.replace(r'\D', '').astype(int)
 
 fea3['Feature'] = fea3['Feature'].map(lambda x: str(x)[:-1])
 fea3['Feature'] = fea3['Feature'].str.replace(r'\D', '').astype(int)
+
+fea12['Feature'] = fea12['Feature'].map(lambda x: str(x)[:-1])
+fea12['Feature'] = fea12['Feature'].str.replace(r'\D', '').astype(int)
+
+fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[:-1])
+fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[:-1])
+fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[1:])
+fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[1:])
+
+fea26['Feature'] = fea26['Feature'].map(lambda x: str(x)[:-1])
+fea26['Feature'] = fea26['Feature'].str.replace(r'\D', '').astype(int)
+
+#fea1['Feature'] = fea1['Feature'].str.replace(r'\D', '').astype(int)
 
 #fea7['Feature'] = fea7['Feature'].map(lambda x: str(x)[:-1])
 #fea7['Feature'] = fea7['Feature'].str.replace(r'\D', '').astype(int)
@@ -149,9 +136,6 @@ fea3['Feature'] = fea3['Feature'].str.replace(r'\D', '').astype(int)
 
 #fea11['Feature'] = fea11['Feature'].map(lambda x: str(x)[:-1])
 #fea11['Feature'] = fea11['Feature'].str.replace(r'\D', '').astype(int)
-
-fea12['Feature'] = fea12['Feature'].map(lambda x: str(x)[:-1])
-fea12['Feature'] = fea12['Feature'].str.replace(r'\D', '').astype(int)
 
 #fea13['Feature'] = fea13['Feature'].map(lambda x: str(x)[:-1])
 #fea13['Feature'] = fea13['Feature'].str.replace(r'\D', '').astype(int)
@@ -177,24 +161,19 @@ fea12['Feature'] = fea12['Feature'].str.replace(r'\D', '').astype(int)
 #fea20['Feature'] = fea20['Feature'].map(lambda x: str(x)[:-1])
 #fea20['Feature'] = fea20['Feature'].str.replace(r'\D', '').astype(int)
 
-fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[:-1])
-fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[:-1])
-fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[1:])
-fea25['Feature'] = fea25['Feature'].map(lambda x: str(x)[1:])
 
-fea26['Feature'] = fea26['Feature'].map(lambda x: str(x)[:-1])
-fea26['Feature'] = fea26['Feature'].str.replace(r'\D', '').astype(int)
 
 
 fea4=new1[new1.Name == 16651] # type(str)
 fea5=new1[new1.Name == 16750] # ip_len(int)
 fea6=new1[new1.Name == 16721] # frame_len(int)
-#fea21=new1[new1.Name == 7790] # frame.cap_len(int)
-#fea22=new1[new1.Name == 7833] # ip.flag_rb
 fea23=new1[new1.Name == 16742] # ip.flag.df
-#fea24=new1[new1.Name == 7832] # ip.flag.mf
 fea27=new1[new1.Name == 16678] # dns.qry.name(str)
 fea28=new1[new1.Name == 16679] # dns.qry.name.len(int)
+#fea21=new1[new1.Name == 7790] # frame.cap_len(int)
+#fea22=new1[new1.Name == 7833] # ip.flag_rb
+#fea24=new1[new1.Name == 7832] # ip.flag.mf
+
 
 fea4['Feature'] = fea4['Feature'].map(lambda x: str(x)[:-1])
 fea4['Feature'] = fea4['Feature'].map(lambda x: str(x)[:-1])
@@ -207,17 +186,8 @@ fea5['Feature'] = fea5['Feature'].str.replace(r'\D', '').astype(int)
 fea6['Feature'] = fea6['Feature'].map(lambda x: str(x)[:-1])
 fea6['Feature'] = fea6['Feature'].str.replace(r'\D', '').astype(int)
 
-#fea21['Feature'] = fea21['Feature'].map(lambda x: str(x)[:-1])
-#fea21['Feature'] = fea21['Feature'].str.replace(r'\D', '').astype(int)
-
-#fea22['Feature'] = fea22['Feature'].map(lambda x: str(x)[:-1])
-#fea22['Feature'] = fea22['Feature'].str.replace(r'\D', '').astype(int)
-
 fea23['Feature'] = fea23['Feature'].map(lambda x: str(x)[:-1])
 fea23['Feature'] = fea23['Feature'].str.replace(r'\D', '').astype(int)
-
-#fea24['Feature'] = fea24['Feature'].map(lambda x: str(x)[:-1])
-#fea24['Feature'] = fea24['Feature'].str.replace(r'\D', '').astype(int)
 
 fea27['Feature'] = fea27['Feature'].map(lambda x: str(x)[:-1])
 fea27['Feature'] = fea27['Feature'].map(lambda x: str(x)[:-1])
@@ -227,9 +197,19 @@ fea27['Feature'] = fea27['Feature'].map(lambda x: str(x)[1:])
 fea28['Feature'] = fea28['Feature'].map(lambda x: str(x)[:-1])
 fea28['Feature'] = fea28['Feature'].str.replace(r'\D', '').astype(int)
 
+#fea21['Feature'] = fea21['Feature'].map(lambda x: str(x)[:-1])
+#fea21['Feature'] = fea21['Feature'].str.replace(r'\D', '').astype(int)
+
+#fea22['Feature'] = fea22['Feature'].map(lambda x: str(x)[:-1])
+#fea22['Feature'] = fea22['Feature'].str.replace(r'\D', '').astype(int)
+
+#fea24['Feature'] = fea24['Feature'].map(lambda x: str(x)[:-1])
+#fea24['Feature'] = fea24['Feature'].str.replace(r'\D', '').astype(int)
+
 
     ###########################################
     ###########################################
+    
 
 #calculating entrophy of dns.qry.name
 import math, string, fileinput
@@ -280,34 +260,73 @@ fea27i['Name'] = fea27['Name'].values
 fea27 = fea27i
 fea27 = fea27[['Name', 'Feature', 'group_no']]
 
+"""
+    ###########################################
+    ###########################################
+    
+#saving all features seperitly    
 
-    ###########################################
-    ###########################################
+#to save
+def save(fea5,name):
+    fea5.to_excel(name+".xlsx", index=False)    
+save(fea5,"fea5")
+    
+def save(fea28,name):
+    fea28.to_excel(name+".xlsx", index=False)    
+save(fea28,"fea28")
+
+def save(fea27,name):
+    fea27.to_excel(name+".xlsx", index=False)    
+save(fea27,"fea27")
+
+
+def save(fea2,name):
+    fea2.to_excel(name+".xlsx", index=False)    
+save(fea2,"fea2")
+    
+def save(fea25,name):
+    fea25.to_excel(name+".xlsx", index=False)    
+save(fea25,"fea25")
+
+def save(fea26,name):
+    fea26.to_excel(name+".xlsx", index=False)    
+save(fea26,"fea26")
+
+#to save
+#save(final_form,"ff")
+#def save(final_form,name):
+    #final_form.to_excel(name+".xlsx", index=False)    
+    
+#to save
+#save(final_form,"ff")
+#def save(final_form,name):
+    #final_form.to_excel(name+".xlsx", index=False)
+
+"""
 
 
 # build a new DataFrame from the futures we pulled
 fea0.columns = ['Name','Type','group_no']
 fea2.columns = ['Name','Ip_len','group_no']
 fea3.columns = ['Name','Frame_len','group_no']
-#fea7.columns = ['Name','Frame.cap_len','group_no']
-#fea11.columns = ['Name','Ip.flag.rb','group_no']
 fea12.columns = ['Name','Ip.flag.df','group_no']
-#fea13.columns = ['Name','Ip.flag.mf','group_no']
 fea25.columns = ['Name','dns.qry.name','group_no']
 fea26.columns = ['Name','dns.qry.name.len','group_no']
 fea0=pd.get_dummies(fea0, prefix=['Type'], columns=['Type'])
-
+#fea7.columns = ['Name','Frame.cap_len','group_no']
+#fea11.columns = ['Name','Ip.flag.rb','group_no']
+#fea13.columns = ['Name','Ip.flag.mf','group_no']
 
 fea4.columns = ['Name','Type','group_no']
 fea5.columns = ['Name','Ip_len','group_no']
 fea6.columns = ['Name','Frame_len','group_no']
-#fea21.columns = ['Name','Frame.cap_len','group_no']
-#fea22.columns = ['Name','Ip.flag.rb','group_no']
 fea23.columns = ['Name','Ip.flag.df','group_no']
-#fea24.columns = ['Name','Ip.flag.mf','group_no']
 fea27.columns = ['Name','dns.qry.name','group_no']
 fea28.columns = ['Name','dns.qry.name.len','group_no']
 fea4=pd.get_dummies(fea4, prefix=['Type'], columns=['Type'])
+#fea21.columns = ['Name','Frame.cap_len','group_no']
+#fea22.columns = ['Name','Ip.flag.rb','group_no']
+#fea24.columns = ['Name','Ip.flag.mf','group_no']
 
 
 # combaine DataFrames
@@ -326,7 +345,7 @@ prototype1=prototype1.sort_index(axis=0, level=None, ascending=True, inplace=Fal
                                  by=None)
 
 
-###########################################
+"""########################################
 ###########################################
 #dummy encoding ///it does work but don't do it
 prototype0=pd.get_dummies(prototype0, prefix=['Name'], columns=['Name'])
@@ -343,7 +362,7 @@ prototype1 = prototype1.drop('Name_7685', 1)
 prototype1 = prototype1.drop('Name_7798', 1)
 prototype1 = prototype1.drop('Name_7839', 1)
 ###########################################
-###########################################
+########################################"""
 
 
 del prototype1['Name']
@@ -384,94 +403,78 @@ prototype011['Tunnelling']=1
 final_form = [prototype011, prototype001]
 final_form = pd.concat(final_form)
 
-X = final_form.iloc[:, 0:6].values
-y = final_form.iloc[:, 6].values
+i= 0
+while(i<1):
+        i= i + 1
+        
+        print(i)
+        
+        final_form = final_form.sample(frac=1)
+        X = final_form.iloc[:, 0:6].values
+        y = final_form.iloc[:, 6].values
 
-# Encoding categorical data
 
-# Splitting the dataset into the Training set and Test set
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+        # Encoding categorical data
 
-# Feature Scaling
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.transform(X_test)
+        # Splitting the dataset into the Training set and Test set
+        from sklearn.model_selection import train_test_split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
-# ANN
-
-# importing the Keras libraries
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import Dropout
-from keras.layers.advanced_activations import LeakyReLU, PReLU
-from keras.models import model_from_json
-
-# initialising the ANN
-classifier = Sequential()
-
-# adding the input layer and first hiden layer
-classifier.add(Dense(activation="relu", input_dim=6, units=18, kernel_initializer="uniform"))
-
-# adding the second hiden layer with Dropout
-classifier.add(Dense(activation="relu", units=20, kernel_initializer="uniform"))
-classifier.add(Dropout(p = 0.2))
-
-classifier.add(Dense(activation="relu", units=11, kernel_initializer="uniform"))
-
-classifier.add(Dense(activation="relu", units=7, kernel_initializer="uniform"))
-
-# adding the output layer
-classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
-
-# compiling the ANN
-classifier.compile(optimizer = 'adamax', loss = 'binary_crossentropy', metrics = ['accuracy'])
-
-# fitting the ANN to the training set
-classifier.fit(X_train, y_train, batch_size = 64, nb_epoch = 50) 
-
-# Predicting the Test set results
-y_pred = classifier.predict(X_test)
-y_pred = (y_pred > 0.5)
-
-# Making the Confusion Matrix
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, y_pred)
+    # Feature Scaling
+        from sklearn.preprocessing import StandardScaler
+        sc = StandardScaler()
+        X_train = sc.fit_transform(X_train)
+        X_test = sc.transform(X_test)
+        
+        
+        # ANN
+        
+        # importing the Keras libraries
+        import keras
+        from keras.models import Sequential
+        from keras.layers import Dense
+        from keras.layers import Dropout
+        from keras.layers.advanced_activations import LeakyReLU, PReLU
+        from keras.models import model_from_json
+        
+        # initialising the ANN
+        classifier = Sequential()
+        
+        # adding the input layer and first hiden layer
+        classifier.add(Dense(activation="relu", input_dim=6, units=18, kernel_initializer="uniform"))
+        
+        # adding the second hiden layer with Dropout
+        classifier.add(Dense(activation="relu", units=20, kernel_initializer="uniform"))
+        classifier.add(Dropout(p = 0.25))
+        
+        classifier.add(Dense(activation="relu", units=11, kernel_initializer="uniform"))
+        
+        classifier.add(Dense(activation="relu", units=7, kernel_initializer="uniform"))
+        
+        classifier.add(Dense(activation="relu", units=17, kernel_initializer="uniform"))
+        classifier.add(Dropout(p = 0.2))
+        
+        # adding the output layer
+        classifier.add(Dense(activation="sigmoid", units=1, kernel_initializer="uniform"))
+        
+        # compiling the ANN
+        classifier.compile(optimizer = 'adamax', loss = 'mse', metrics = ['accuracy'])
+        
+        # fitting the ANN to the training set
+        classifier.fit(X_train, y_train, batch_size = 32, nb_epoch = 50) 
+        
+        # Predicting the Test set results
+        y_pred = classifier.predict(X_test)
+        y_pred = (y_pred > 0.5)
+        
+        # Making the Confusion Matrix
+        from sklearn.metrics import confusion_matrix
+        cm = confusion_matrix(y_test, y_pred)
 
 
 # Predicting the single packet
-new_predection = classifier.predict(sc.transform(np.array([[3, 0, 0,]])))
+new_predection = classifier.predict(sc.transform(np.array([[3, 7, 0, 15, 0, 7]])))
 
-
-##############################
-
-# serialize model to JSON
-model_json = classifier.to_json()
-with open("modeljuly31.json", "w") as json_file:
-    json_file.write(model_json)
-# serialize weights to HDF5
-classifier.save_weights("modeljuly31.h5")
-print("Saved model to disk")
- 
-# later...
- 
-# load json and create model
-json_file = open('modeljuly31.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
-# load weights into new model
-loaded_model.load_weights("modeljuly31.h5")
-print("Loaded model from disk")
- 
-# evaluate loaded model on test data
-loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-score = loaded_model.evaluate(y_pred, y_test, verbose=0)
-print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
-
-###################################
 
 
 # Evaluating the ANN
@@ -559,35 +562,81 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
+from sklearn.datasets import make_circles
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import cohen_kappa_score
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import confusion_matrix
 
-# Initialising the RNN
-regressor = Sequential()
+# define and fit the model
+def get_model(trainX, trainy):
+    # Initialising the RNN
+    regressor = Sequential()
 
-# Adding the first LSTM layer and some Dropout regularistion
-regressor.add(LSTM(units = 50, return_sequences = True,
-                   input_shape = (X_train.shape[1], 1)))
-regressor.add(Dropout(0.2))
+    # Adding the first LSTM layer and some Dropout regularistion
+    regressor.add(LSTM(units = 50, return_sequences = True,
+                       input_shape = (X_train.shape[1], 1)))
+    regressor.add(Dropout(0.2))
+    
+    # Adding a second LSTM layer and some Dropout regularisation
+    regressor.add(LSTM(units = 50, return_sequences = True))
+    regressor.add(Dropout(0.2))
+    
+    # Adding a third LSTM layer and some Dropout regularisation
+    regressor.add(LSTM(units = 50, return_sequences = True))
+    regressor.add(Dropout(0.2))
+    
+    # Adding a fourth LSTM layer and some Dropout regularisation
+    regressor.add(LSTM(units = 50))
+    regressor.add(Dropout(0.2))
+    
+    # Adding the output layer
+    regressor.add(Dense(units = 1))
+    
+    # Compiling the RNN
+    regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
+    
+    # Fitting the RNN to the Training set
+    regressor.fit(X_train, y_train, epochs = 100, batch_size = 32)
+    return regressor
 
-# Adding a second LSTM layer and some Dropout regularisation
-regressor.add(LSTM(units = 50, return_sequences = True))
-regressor.add(Dropout(0.2))
+# fit model
+regressor = get_model(X_train, y_train)
 
-# Adding a third LSTM layer and some Dropout regularisation
-regressor.add(LSTM(units = 50, return_sequences = True))
-regressor.add(Dropout(0.2))
+# predict probabilities for test set
+yhat_probs = regressor.predict(X, verbose=0)
+# predict crisp classes for test set
+yhat_classes = regressor.predict_classes(X, verbose=0)
 
-# Adding a fourth LSTM layer and some Dropout regularisation
-regressor.add(LSTM(units = 50))
-regressor.add(Dropout(0.2))
+yhat_probs = yhat_probs[:, 0]
+yhat_classes = yhat_classes[:, 0]
 
-# Adding the output layer
-regressor.add(Dense(units = 1))
+# accuracy: (tp + tn) / (p + n)
+accuracy = accuracy_score(y, yhat_classes)
+print('Accuracy: %f' % accuracy)
+# precision tp / (tp + fp)
+precision = precision_score(y, yhat_classes)
+print('Precision: %f' % precision)
+# recall: tp / (tp + fn)
+recall = recall_score(y, yhat_classes)
+print('Recall: %f' % recall)
+# f1: 2 tp / (2 tp + fp + fn)
+f1 = f1_score(y, yhat_classes)
+print('F1 score: %f' % f1)
 
-# Compiling the RNN
-regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
+# kappa
+kappa = cohen_kappa_score(y, yhat_classes)
+print('Cohens kappa: %f' % kappa)
+# ROC AUC
+auc = roc_auc_score(y, yhat_probs)
+print('ROC AUC: %f' % auc)
+# confusion matrix
+matrix = confusion_matrix(y, yhat_classes)
+print(matrix)
 
-# Fitting the RNN to the Training set
-regressor.fit(X_train, y_train, epochs = 100, batch_size = 32)
 
 ##############################################
 
@@ -612,7 +661,66 @@ print("Loaded model from disk")
  
 # evaluate loaded model on test data
 loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-score = loaded_model.evaluate(X, Y, verbose=0)
+score = loaded_model.evaluate(X, y, verbose=0)
 print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
 ########################################################
+
+from keras.models import load_model
+# evaluate the model
+scores = classifier.evaluate(X_test, y_test, verbose=0)
+print("%s: %.2f%%" % (classifier.metrics_names[1], scores[1]*100))
+
+# save model and architecture to single file
+classifier.save('/home/ellenfel/Desktop/classifier.h5')
+
+# Recreate the exact same model purely from the file
+new_model = keras.models.load_model('/home/ellenfel/Desktop/classifier.h5')
+print("Saved classifier to disk")
+
+# Save predictions for future checks
+predictions = classifier.predict(X_test)
+
+# Check that the state is preserved
+new_predictions = new_model.predict(X_test)
+np.testing.assert_allclose(predictions, new_predictions, rtol=1e-6, atol=1e-6)
+
+# Note that the optimizer state is preserved as well:
+# you can resume training where you left off.
+
+
+# load and evaluate a saved model
+from numpy import loadtxt
+from keras.models import load_model
+ 
+# load model
+classifier = load_model('classifier.h5')
+# summarize model.
+classifier.summary()
+
+# load dataset
+dataset = loadtxt("dataset.csv", delimiter=",")
+# split into input (X) and output (Y) variables
+X = dataset[:,0:6]
+y = dataset[:,6]
+# evaluate the model
+score = classifier.evaluate(X, y, verbose=0)
+print("%s: %.2f%%" % (classifier.metrics_names[1], score[1]*100))
+
+classifier = load_model(fp_path+"classifier.h5")
+preds = classifier.predict_classes(X_test)
+prob = classifier.predict_proba(X_test)
+print(preds, prob)
+
+#predict
+new_predection = classifier.predict(sc.transform(np.array([[3, 0, 0, 0, 0, 0]])))
+
+
+##########################################
+
+#picle
+import pickle
+outfile=open("model.h",'wb')
+pickle.dump(classifier,outfile)
+outfile.close()
+ 
