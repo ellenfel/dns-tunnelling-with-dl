@@ -1,4 +1,5 @@
-i will add a detailed explanation of the both research and currently very messy source-code for the paper. iam currently low-key working on revison of source code.
+i will add a detailed explanation of the both research and currently very messy source-code for the paper. iam currently low-key working on revison of source code. 
+I did added the messy version of it with alot of comment tho. so if you wanna check it out be my guest.
 
 Make sure to check out to paper:
 https://www.researchgate.net/publication/354225319_Deep_Learning_Based_DNS_Tunneling_Detection_and_Blocking_System
