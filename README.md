@@ -4,6 +4,8 @@ I did added the messy version of it with alot of comment tho. so if you wanna ch
 Make sure to check out to paper:
 https://www.researchgate.net/publication/354225319_Deep_Learning_Based_DNS_Tunneling_Detection_and_Blocking_System
 
+https://aece.ro/abstractplus.php?year=2021&number=3&article=5
+
 # Heres a sneak peak:
 ![](https://github.com/ellenfel/dns-tunnelling-with-dl/blob/master/publicationgif.gif)
  
